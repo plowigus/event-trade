@@ -1,14 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import Menu from "./components/HeroSection/Menu";
+import { MenuProvider } from "./context/MenuContext";
 import "./globals.css";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const Chillax = localFont({
+  src: "../../public/fonts/Chillax-Variable.ttf",
+  variable: "--font-chillax",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const Museo = localFont({
+  src: "../../public/fonts/MuseoModerno-VariableFont_wght.ttf",
+  variable: "--font-museo",
 });
 
 export const metadata = {
@@ -18,11 +20,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" className={`${Chillax.variable} ${Museo.variable}`}>
+      <body className="antialiased">
+        <MenuProvider>
+          <main>
+            <Menu />
+            {children}
+          </main>
+        </MenuProvider>
       </body>
     </html>
   );
