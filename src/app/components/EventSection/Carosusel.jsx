@@ -3,7 +3,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { lazy } from "react";
 
-export default function carousel({ carouselData }) {
+export default function Carousel({ carouselData }) {
   const [emblaRef] = useEmblaCarousel();
 
   // console.log("Carousel Data in Carousel Component:", carouselData);
