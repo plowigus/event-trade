@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import PrismEffect from "../AnimatedGradient/PrismEffect";
 import Image from "next/image";
 import Carousel from "./Carosusel";
-import { fetchCarouselData } from "../../../../lib/function.jsx";
+import { fetchCarouselData } from "../../../../lib/function.js";
 
 export default function EventCarousel() {
   const [carouselData, setCarouselData] = useState(null);
