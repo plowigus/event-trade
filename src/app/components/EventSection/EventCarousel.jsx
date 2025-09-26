@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import PrismEffect from "../AnimatedGradient/PrismEffect";
+import PrismEffect from "../AnimatedGradient/PrismEffect.jsx";
 import Image from "next/image";
-import Carousel from "./Carosusel";
+import Carousel from "./Carosusel.jsx";
 import { fetchCarouselData } from "../../../../lib/function.js";
 
 export default function EventCarousel() {
