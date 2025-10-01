@@ -294,3 +294,30 @@ svg {
   animation: slide-right 3s ease-in-out infinite;
   animation-delay: 1s;
 }
+
+.footer-gradient-1 {
+  background: #00889f;
+  background: radial-gradient(
+    circle,
+    rgba(0, 136, 159, 1) 0%,
+    rgba(8, 59, 73, 1) 82%
+  );
+}
+
+.footer-gradient-2 {
+  background: #c0368b;
+  background: radial-gradient(
+    circle,
+    rgba(192, 54, 139, 1) 0%,
+    rgba(127, 28, 89, 1) 100%
+  );
+}
+
+.footer-gradient-3 {
+  background: #f0c30e;
+  background: radial-gradient(
+    circle,
+    rgba(240, 195, 14, 1) 0%,
+    rgba(167, 98, 27, 1) 100%
+  );
+}

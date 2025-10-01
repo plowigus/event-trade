@@ -82,7 +82,7 @@ export default function Menu() {
         ball.style.background = `radial-gradient(circle at 30% 30%, 
           rgba(0, 240, 255, ${gsap.utils.random(0.3, 0.8)}), 
           rgba(84, 170, 183, ${gsap.utils.random(0.2, 0.6)}))`;
-        ball.style.filter = "blur(3px)";
+        ball.style.filter = "blur(8px)";
         ball.style.left = `${gsap.utils.random(0, 100)}%`;
         ball.style.top = `${gsap.utils.random(0, 100)}%`;
 
