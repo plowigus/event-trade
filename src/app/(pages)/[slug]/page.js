@@ -1,17 +1,21 @@
-// src/app/(pages)/[slug]/page.js - Dynamic page dla każdego slug
+// src/app/(pages)/[slug]/page.js - Dynamic page dla slug nieokreślonych w dedykowanych stronach
 
 import { notFound } from "next/navigation";
 import { getMenu } from "../../../../lib/queries";
 import { pathToSlug, slugToTitle } from "../../../../lib/utils";
 
 // Komponenty dla różnych typów stron
-import RealizacjePage from "./components/RealizacjePage";
 import UslugiPage from "./components/UslugiPage";
-import KontaktPage from "./components/KontaktPage";
 import DefaultPage from "./components/DefaultPage";
 
 export default async function DynamicPage({ params }) {
   const { slug } = await params;
+
+  // Przekieruj na dedykowane strony jeśli próbują dostać się przez slug
+  const dedicatedPages = ["kontakt", "zespol", "realizacje", "referencje"];
+  if (dedicatedPages.includes(slug)) {
+    notFound(); // 404 - te strony mają dedykowane ścieżki
+  }
 
   // Pobierz dane menu
   const menuData = await getMenu();
@@ -27,16 +31,9 @@ export default async function DynamicPage({ params }) {
   // Renderuj odpowiedni komponent na podstawie slug
   const renderPageComponent = () => {
     switch (slug) {
-      case "realizacje-2":
-      case "realizacje":
-        return <RealizacjePage pageData={currentPage} />;
-
       case "uslugi":
       case "oferta":
         return <UslugiPage pageData={currentPage} />;
-
-      case "kontakt":
-        return <KontaktPage pageData={currentPage} />;
 
       default:
         return <DefaultPage pageData={currentPage} slug={slug} />;

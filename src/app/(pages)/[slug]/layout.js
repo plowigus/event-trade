@@ -39,10 +39,5 @@ export default async function PageLayout({ children, params }) {
 
   const pageTitle = slugToTitle(slug);
 
-  return (
-    <>
-      <Header />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

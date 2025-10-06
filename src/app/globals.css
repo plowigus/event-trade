@@ -321,3 +321,23 @@ svg {
     rgba(167, 98, 27, 1) 100%
   );
 }
+
+.team-container {
+  display: flex;
+  gap: 1.5rem;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-gradient {
+  flex: 1; /* Domyślnie równa szerokość */
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.team-container:hover .team-gradient {
+  flex: 0.4; /* Zmniejsz wszystkie do 40% */
+}
+
+.team-container .team-gradient:hover {
+  flex: 2.2 !important; /* Rozszerz aktywny do 220% */
+}

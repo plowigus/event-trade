@@ -3,8 +3,6 @@ import { fetchFooterData } from "../../../../lib/function";
 
 export default async function FooterSection() {
   const data = await fetchFooterData();
-
-  console.log(data.mainSection.title);
   const emails = data.contactSection.emails;
 
   // Podziel tytuł po słowie "imprez"
@@ -14,9 +12,6 @@ export default async function FooterSection() {
 
   return (
     <div className="w-full h-auto bg-black py-16">
-      <p className="uppercase font-museo text-white tracking-widest text-center">
-        Zadzwoń lub napisz do nas:
-      </p>
       <div className="grid grid-cols-9 px-8 w-full h-[400px] text-white  mt-16 gap-6">
         <div className="col-span-3 footer-gradient-1 relative rounded-xl">
           {/* Nested grid wewnątrz kolumny z telefonem */}
@@ -99,11 +94,6 @@ export default async function FooterSection() {
             className="absolute bottom-[-2px] right-[-5px]"
           />
         </div>
-      </div>
-      <div className="text-center text-white font-museo tracking-[4px] uppercase mt-16">
-        {firstPart}
-        <br />
-        {secondPart}
       </div>
     </div>
   );
