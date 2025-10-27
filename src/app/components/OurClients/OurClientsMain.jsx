@@ -19,19 +19,13 @@ export default function OurClientsMain() {
     drag: true,
     autoplay: true,
     created(s) {
-      if (data?.logos?.length > 2) {
-        s.moveToIdx(5, true, animation);
-      }
+      s.moveToIdx(5, true, animation);
     },
     updated(s) {
-      if (data?.logos?.length > 2) {
-        s.moveToIdx(s.track.details.abs + 5, true, animation);
-      }
+      s.moveToIdx(s.track.details.abs + 5, true, animation);
     },
     animationEnded(s) {
-      if (data?.logos?.length > 2) {
-        s.moveToIdx(s.track.details.abs + 5, true, animation);
-      }
+      s.moveToIdx(s.track.details.abs + 5, true, animation);
     },
   });
 
