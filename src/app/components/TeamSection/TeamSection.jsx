@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { CSSPlugin } from "gsap/CSSPlugin";
 import { fetchTeamSectionData } from "../../../../lib/function";
+
+// Rejestracja pluginu GSAP
+gsap.registerPlugin(CSSPlugin);
 
 export default function TeamSection() {
   const [hoveredElement, setHoveredElement] = useState(null);
@@ -126,7 +130,8 @@ export default function TeamSection() {
       }
       gsap.to(cursor, {
         opacity: 1,
-        scale: 1,
+        scaleX: 1,
+        scaleY: 1,
         duration: 0.3,
         ease: "power2.out",
       });
@@ -141,7 +146,8 @@ export default function TeamSection() {
       }
       gsap.to(cursor, {
         opacity: 0,
-        scale: 0.8,
+        scaleX: 0.8,
+        scaleY: 0.8,
         duration: 0.3,
         ease: "power2.out",
       });
