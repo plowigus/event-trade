@@ -5,6 +5,7 @@ import AnimatedGradients from "../HeroSection/AnimatedGradients";
 import { Card } from "@/components/ui/card";
 import { fetchOffertData } from "../../../../lib/function";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function OffertSecion() {
   const [data, setData] = useState(null);
@@ -34,9 +35,11 @@ export default function OffertSecion() {
   return (
     <div className="bg-[#010108] relative h-auto w-full z-[31] flex flex-col">
       <div className="bg-[#53A7B2] text-white text-center  mt-16 px-8 py-3 w-10/12 z-[31]">
-        <h2 className="text-2xl lg:text-3xl uppercase tracking-widest font-museo">
-          {data.mainTitle || "Oferta"}
-        </h2>
+        <Link href="/oferta" className="block">
+          <h2 className="text-2xl lg:text-3xl uppercase tracking-widest font-museo hover:text-gray-200 transition-colors">
+            {data.mainTitle || "Oferta"}
+          </h2>
+        </Link>
       </div>
 
       <div className="grid grid-cols-10 grid-rows-2 gap-8  flex-1 z-[30] my-16">
@@ -211,9 +214,29 @@ function OffertCard({ offert, position }) {
           ref={textBottomRef}
           className="absolute bg-[#53a7b275]  bottom-0 left-0 right-0 z-20 text-white p-4 col-start-1 col-span-10 row-start-10 row-span-1"
         >
-          <h3 className="text-sm font-museo uppercase drop-shadow-lg">
-            {offert.title}
-          </h3>
+          <Link
+            href={`/oferta/${offert.title
+              .toLowerCase()
+              .replace(/\s+/g, "-")
+              .replace(/[ąćęłńóśźż]/g, (match) => {
+                const map = {
+                  ą: "a",
+                  ć: "c",
+                  ę: "e",
+                  ł: "l",
+                  ń: "n",
+                  ó: "o",
+                  ś: "s",
+                  ź: "z",
+                  ż: "z",
+                };
+                return map[match] || match;
+              })}`}
+          >
+            <h3 className="text-sm font-museo uppercase drop-shadow-lg hover:text-gray-300 transition-colors">
+              {offert.title}
+            </h3>
+          </Link>
         </div>
 
         {/* Hover overlay - animacja z checkboxami */}
@@ -224,26 +247,67 @@ function OffertCard({ offert, position }) {
           <div className="grid grid-cols-12 grid-rows-12 h-full w-full  text-white">
             {/* Tytuł na górze */}
             <div className="col-start-1 col-span-9 row-start-1 row-span-2 flex items-center">
-              <h3
-                ref={titleRef}
-                className="text-xl font-museo uppercase p-4 mt-8"
+              <Link
+                href={`/oferta/${offert.title
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")
+                  .replace(/[ąćęłńóśźż]/g, (match) => {
+                    const map = {
+                      ą: "a",
+                      ć: "c",
+                      ę: "e",
+                      ł: "l",
+                      ń: "n",
+                      ó: "o",
+                      ś: "s",
+                      ź: "z",
+                      ż: "z",
+                    };
+                    return map[match] || match;
+                  })}`}
               >
-                {offert.title}
-              </h3>
+                <h3
+                  ref={titleRef}
+                  className="text-xl font-museo uppercase p-4 mt-8 hover:text-gray-300 transition-colors"
+                >
+                  {offert.title}
+                </h3>
+              </Link>
             </div>
 
             {/* Lista checków - od lewej strony, bez scrolla */}
             <div className="col-start-1 col-span-12 row-start-3 row-span-7 flex flex-col justify-start p-4 mt-4">
               <div className="grid grid-cols-1 gap-3 max-h-full">
                 {offert.checks.map((check, checkIndex) => (
-                  <div
+                  <Link
                     key={checkIndex}
-                    ref={(el) => (checksRef.current[checkIndex] = el)}
-                    className="flex items-center space-x-3"
+                    href={`/oferta/${check
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[ąćęłńóśźż]/g, (match) => {
+                        const map = {
+                          ą: "a",
+                          ć: "c",
+                          ę: "e",
+                          ł: "l",
+                          ń: "n",
+                          ó: "o",
+                          ś: "s",
+                          ź: "z",
+                          ż: "z",
+                        };
+                        return map[match] || match;
+                      })}`}
+                    className="block"
                   >
-                    <div className="w-2 h-2 bg-[#53A7B2] rounded-full flex-shrink-0"></div>
-                    <span className="text-xs leading-relaxed">{check}</span>
-                  </div>
+                    <div
+                      ref={(el) => (checksRef.current[checkIndex] = el)}
+                      className="flex items-center space-x-3 hover:text-gray-300 transition-colors"
+                    >
+                      <div className="w-2 h-2 bg-[#53A7B2] rounded-full flex-shrink-0"></div>
+                      <span className="text-xs leading-relaxed">{check}</span>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>

@@ -11,10 +11,10 @@ export default function OurClientsMain() {
   const [data, setData] = useState(null);
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: Math.min(5, data?.logos?.length || 1), // Dostosuj do liczby dostępnych logo
+      perView: 6, // Dostosuj do liczby dostępnych logo
       spacing: 15,
     },
-    loop: data?.logos?.length > 2, // Loop tylko jeśli jest więcej niż 2 elementy
+    loop: true,
     renderMode: "performance",
     drag: true,
     created(s) {
