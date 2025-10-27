@@ -17,6 +17,7 @@ export default function OurClientsMain() {
     loop: true,
     renderMode: "performance",
     drag: true,
+    autoplay: true,
     created(s) {
       if (data?.logos?.length > 2) {
         s.moveToIdx(5, true, animation);
