@@ -23,8 +23,6 @@ export default function AboutSecion() {
   useEffect(() => {
     if (!data || !barRef.current) return;
 
-    console.log("Starting GSAP animation"); // Debug log
-
     // Animacja głównego paska - z prawej strony do połowy ekranu i powrót
     gsap.set(barRef.current, { x: 0 }); // Reset pozycji
 

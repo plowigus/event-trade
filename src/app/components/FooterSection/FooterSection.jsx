@@ -4,7 +4,6 @@ import { fetchFooterData } from "../../../../lib/function";
 export default async function FooterSection() {
   const data = await fetchFooterData();
 
-  console.log(data.mainSection.title);
   const emails = data.contactSection.emails;
 
   // Podziel tytuł po słowie "imprez"

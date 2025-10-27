@@ -28,8 +28,6 @@ export default function OffertSecion() {
   if (loading) return <div>Loading...</div>;
   if (!data) return <div>Error loading data</div>;
 
-  console.log("Offert data:", data);
-
   // Bierzemy pierwsze 6 ofert
   const offerts = data.offerts.slice(0, 6);
 

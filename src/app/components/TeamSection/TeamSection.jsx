@@ -24,7 +24,7 @@ export default function TeamSection() {
     const loadTeamData = async () => {
       try {
         const data = await fetchTeamSectionData();
-        console.log("Team Section Data:", data);
+
         setTeamData(data);
       } catch (error) {
         console.error("Error loading team data:", error);

@@ -59,7 +59,7 @@ export default async function Hero() {
 
         <section className="absolute bottom-0 z-10 h-[45%] w-full gradient-section">
           <div className="w-full h-full" style={{ position: "relative" }}>
-            <AnimatedGradients />
+            {/* <AnimatedGradients /> */}
             <div className="w-full h-full grid grid-cols-12 gap-4 items-center justify-items-center text-center text-white py-7  relative z-10">
               <div className="col-span-10 col-start-2 lg:col-span-8 lg:col-start-3 xl:col-span-8 xl:col-start-3 space-y-6">
                 <h2 className="text-4xl lg:text-5xl xl:text-4xl font-museo  tracking-wide">
