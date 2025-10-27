@@ -1,5 +1,5 @@
 "use client";
-import { fetchOurClientsData } from "../../../../lib/function";
+import { fetchClientLogosData } from "../../../../lib/function";
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -11,32 +11,41 @@ export default function OurClientsMain() {
   const [data, setData] = useState(null);
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 5,
+      perView: Math.min(5, data?.logos?.length || 1), // Dostosuj do liczby dostępnych logo
       spacing: 15,
     },
-    loop: true,
+    loop: data?.logos?.length > 2, // Loop tylko jeśli jest więcej niż 2 elementy
     renderMode: "performance",
     drag: true,
     created(s) {
-      s.moveToIdx(5, true, animation);
+      if (data?.logos?.length > 2) {
+        s.moveToIdx(5, true, animation);
+      }
     },
     updated(s) {
-      s.moveToIdx(s.track.details.abs + 5, true, animation);
+      if (data?.logos?.length > 2) {
+        s.moveToIdx(s.track.details.abs + 5, true, animation);
+      }
     },
     animationEnded(s) {
-      s.moveToIdx(s.track.details.abs + 5, true, animation);
+      if (data?.logos?.length > 2) {
+        s.moveToIdx(s.track.details.abs + 5, true, animation);
+      }
     },
   });
 
   useEffect(() => {
     const loadData = async () => {
-      const clientsData = await fetchOurClientsData();
+      const clientsData = await fetchClientLogosData();
+      console.log("🏢 Client logos data:", clientsData);
       setData(clientsData);
     };
     loadData();
   }, []);
 
   if (!data) return <div className="text-white">Loading...</div>;
+
+  console.log("🎠 Rendering logos:", data.logos?.length || 0);
 
   return (
     <div className="w-full h-auto bg-black text-white py-16">

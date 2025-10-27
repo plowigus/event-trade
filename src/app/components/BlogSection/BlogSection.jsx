@@ -1,9 +1,10 @@
-import { fetchLast4PostsData } from "../../../../lib/function";
+import { fetchLast4RealizationsData } from "../../../../lib/function";
 import Image from "next/image";
+import Link from "next/link";
 import PrismEffect from "../AnimatedGradient/PrismEffect";
 
 export default async function BlogSection() {
-  const data = await fetchLast4PostsData();
+  const data = await fetchLast4RealizationsData();
 
   return (
     <div className="h-auto w-full bg-black text-white py-16 relative">
@@ -18,14 +19,14 @@ export default async function BlogSection() {
       {/* Grid z kartami blog */}
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8">
-          {data.posts.map((post) => (
-            <div key={post.id} className="">
+          {data.realizations.map((realization) => (
+            <div key={realization.id} className="">
               {/* IMAGE */}
-              <div className="w-full  aspect-square relative">
-                {post.featuredImage.url ? (
+              <div className="w-full aspect-square relative">
+                {realization.heroImage ? (
                   <Image
-                    src={post.featuredImage.url}
-                    alt={post.featuredImage.alt}
+                    src={realization.heroImage}
+                    alt={realization.heroText || realization.title}
                     fill
                     className="object-cover"
                   />
@@ -34,12 +35,15 @@ export default async function BlogSection() {
 
               {/* Treść karty */}
               <div className="py-4">
-                {/* KATEGORIA */}
+                {/* KATEGORIA - FIRMA (klikalna do /realizacje/{company}) */}
                 <div className="mb-2">
-                  {post.categories.length > 0 ? (
-                    <span className="text-lg text-white font-museo uppercase tracking-wide">
-                      {post.categories[0].name}
-                    </span>
+                  {realization.company ? (
+                    <Link
+                      href={`/realizacje/${realization.company.toLowerCase()}`}
+                      className="text-lg text-white font-museo uppercase tracking-wide hover:text-gray-300 transition-colors"
+                    >
+                      {realization.company}
+                    </Link>
                   ) : (
                     <span className="text-sm text-gray-400 uppercase tracking-wide">
                       Uncategorized
@@ -47,15 +51,22 @@ export default async function BlogSection() {
                   )}
                 </div>
 
-                {/* NAZWA POSTA */}
-                <h3 className="text-md font-bold font-museo mb-3 line-clamp-2">
-                  {post.title}
-                </h3>
+                {/* NAZWA POSTA - NAZWA WYDARZENIA (klikalna do pełnej realizacji) */}
+                <Link
+                  href={`/realizacje/${realization.company?.toLowerCase()}/${
+                    realization.slug
+                  }`}
+                  className="block"
+                >
+                  <h3 className="text-md font-bold font-museo mb-3 line-clamp-2 hover:text-gray-300 transition-colors">
+                    {realization.heroText || realization.title}
+                  </h3>
+                </Link>
 
                 {/* TAGI ROZDZIELONE "/" */}
                 <div className="text-sm text-white font-museo font-light">
-                  {post.tags.length > 0 ? (
-                    <span>{post.tags.join(" / ")}</span>
+                  {realization.tags.length > 0 ? (
+                    <span>{realization.tags.join(" / ")}</span>
                   ) : (
                     <span>Brak tagów</span>
                   )}
