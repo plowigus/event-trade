@@ -3,7 +3,7 @@ import Header from "@/app/components/Header";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function OfferDetail({ offer }) {
+export default function OfferDetail({ offer, relatedRealizations }) {
   if (!offer) {
     return (
       <div className="bg-black min-h-screen flex items-center justify-center">
@@ -189,7 +189,120 @@ export default function OfferDetail({ offer }) {
         </section>
       )}
 
-      {/* 7. Contact CTA */}
+      {/* 7. Related Realizations Section */}
+      {relatedRealizations?.relatedRealizations?.length > 0 && (
+        <section className="py-20 lg:py-32 bg-gray-900">
+          <div className="container mx-auto px-8">
+            <div className="max-w-7xl mx-auto">
+              {/* Section Header */}
+              <div className="text-center mb-16">
+                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+                  Nasze realizacje w tej kategorii
+                </h2>
+                <p className="text-xl text-gray-300">
+                  Zobacz przykłady podobnych projektów które zrealizowaliśmy
+                </p>
+                {relatedRealizations.offerTags?.length > 0 && (
+                  <div className="flex flex-wrap justify-center gap-2 mt-6">
+                    <span className="text-gray-400 text-sm mr-2">Tagi oferty:</span>
+                    {relatedRealizations.offerTags.map((tag) => (
+                      <span
+                        key={tag.id}
+                        className="bg-[#C0368B] text-white px-3 py-1 rounded-full text-sm"
+                      >
+                        #{tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Realizations Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {relatedRealizations.relatedRealizations.map((realization) => (
+                  <Link
+                    key={realization.id}
+                    href={`/realizacje/${realization.company}/${realization.slug}`}
+                    className="group bg-black rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300"
+                  >
+                    {/* Image */}
+                    <div className="relative h-64 overflow-hidden">
+                      {realization.heroImage ? (
+                        <Image
+                          src={realization.heroImage}
+                          alt={realization.heroText || realization.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#53A7B2] to-[#C0368B] flex items-center justify-center">
+                          <span className="text-white text-xl font-bold">
+                            {realization.companyName}
+                          </span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[#C0368B] text-sm font-semibold uppercase tracking-wider">
+                          {realization.companyName}
+                        </span>
+                        {realization.matchedTags?.length > 0 && (
+                          <span className="text-[#53A7B2] text-xs">
+                            {realization.matchedTags.length} wspólnych tagów
+                          </span>
+                        )}
+                      </div>
+                      
+                      <h3 className="text-white text-lg font-bold mb-3 group-hover:text-[#C0368B] transition-colors">
+                        {realization.heroText || realization.title}
+                      </h3>
+
+                      {/* Matched Tags */}
+                      {realization.matchedTags?.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-4">
+                          {realization.matchedTags.slice(0, 3).map((tag, index) => (
+                            <span
+                              key={index}
+                              className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs"
+                            >
+                              #{tag.name}
+                            </span>
+                          ))}
+                          {realization.matchedTags.length > 3 && (
+                            <span className="text-gray-500 text-xs px-2 py-1">
+                              +{realization.matchedTags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      <span className="text-[#53A7B2] text-sm font-medium group-hover:text-white transition-colors">
+                        Zobacz realizację →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* View All Button */}
+              <div className="text-center mt-12">
+                <Link
+                  href="/realizacje"
+                  className="inline-block border border-[#C0368B] text-[#C0368B] px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#C0368B] hover:text-white transition-colors"
+                >
+                  Zobacz wszystkie realizacje
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 8. Contact CTA */}
       <section className="py-20 lg:py-32 bg-gray-900">
         <div className="container mx-auto px-8">
           <div className="max-w-4xl mx-auto text-center">

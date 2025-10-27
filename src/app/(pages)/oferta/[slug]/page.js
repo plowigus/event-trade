@@ -1,7 +1,7 @@
 //  src/app/(pages)/oferta/[slug]/page.js
 import { notFound } from "next/navigation";
 import FooterSection from "@/app/components/ContactSection/FooterCardOnly";
-import { fetchOfferBySlug, fetchOfferPosts } from "../../../../../lib/function";
+import { fetchOfferBySlug, fetchOfferPosts, fetchRelatedRealizations } from "../../../../../lib/function";
 import OfferDetail from "./components/OfferDetail";
 
 export default async function SingleOfferPage({ params }) {
@@ -18,9 +18,12 @@ export default async function SingleOfferPage({ params }) {
     notFound();
   }
 
+  // Pobierz powiązane realizacje na podstawie tagów
+  const relatedData = await fetchRelatedRealizations(slug, 6);
+
   return (
     <>
-      <OfferDetail offer={offer} />
+      <OfferDetail offer={offer} relatedRealizations={relatedData} />
       <FooterSection />
     </>
   );
