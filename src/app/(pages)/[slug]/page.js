@@ -12,7 +12,13 @@ export default async function DynamicPage({ params }) {
   const { slug } = await params;
 
   // Przekieruj na dedykowane strony jeśli próbują dostać się przez slug
-  const dedicatedPages = ["kontakt", "zespol", "realizacje", "referencje"];
+  const dedicatedPages = [
+    "kontakt",
+    "zespol",
+    "realizacje",
+    "referencje",
+    "oferta",
+  ];
   if (dedicatedPages.includes(slug)) {
     notFound(); // 404 - te strony mają dedykowane ścieżki
   }
@@ -32,7 +38,6 @@ export default async function DynamicPage({ params }) {
   const renderPageComponent = () => {
     switch (slug) {
       case "uslugi":
-      case "oferta":
         return <UslugiPage pageData={currentPage} />;
 
       default:
@@ -43,6 +48,35 @@ export default async function DynamicPage({ params }) {
   return (
     <div className={`dynamic-page slug-${slug}`}>{renderPageComponent()}</div>
   );
+}
+
+// Generate static params - tylko dla dozwolonych slugów
+export async function generateStaticParams() {
+  try {
+    const menuData = await getMenu();
+    const menuItems = menuData.menu.menuItems.nodes;
+
+    // Filtruj tylko te które nie mają dedykowanych stron
+    const dedicatedPages = [
+      "kontakt",
+      "zespol",
+      "realizacje",
+      "referencje",
+      "oferta",
+    ];
+
+    return menuItems
+      .filter((item) => {
+        const slug = pathToSlug(item.path);
+        return !dedicatedPages.includes(slug) && slug !== "start";
+      })
+      .map((item) => ({
+        slug: pathToSlug(item.path),
+      }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 // Generate metadata dla SEO
