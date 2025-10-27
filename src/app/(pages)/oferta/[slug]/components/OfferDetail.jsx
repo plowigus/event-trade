@@ -204,7 +204,9 @@ export default function OfferDetail({ offer, relatedRealizations }) {
                 </p>
                 {relatedRealizations.offerTags?.length > 0 && (
                   <div className="flex flex-wrap justify-center gap-2 mt-6">
-                    <span className="text-gray-400 text-sm mr-2">Tagi oferty:</span>
+                    <span className="text-gray-400 text-sm mr-2">
+                      Tagi oferty:
+                    </span>
                     {relatedRealizations.offerTags.map((tag) => (
                       <span
                         key={tag.id}
@@ -256,7 +258,7 @@ export default function OfferDetail({ offer, relatedRealizations }) {
                           </span>
                         )}
                       </div>
-                      
+
                       <h3 className="text-white text-lg font-bold mb-3 group-hover:text-[#C0368B] transition-colors">
                         {realization.heroText || realization.title}
                       </h3>
@@ -264,14 +266,16 @@ export default function OfferDetail({ offer, relatedRealizations }) {
                       {/* Matched Tags */}
                       {realization.matchedTags?.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-4">
-                          {realization.matchedTags.slice(0, 3).map((tag, index) => (
-                            <span
-                              key={index}
-                              className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs"
-                            >
-                              #{tag.name}
-                            </span>
-                          ))}
+                          {realization.matchedTags
+                            .slice(0, 3)
+                            .map((tag, index) => (
+                              <span
+                                key={index}
+                                className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs"
+                              >
+                                #{tag.name}
+                              </span>
+                            ))}
                           {realization.matchedTags.length > 3 && (
                             <span className="text-gray-500 text-xs px-2 py-1">
                               +{realization.matchedTags.length - 3}
