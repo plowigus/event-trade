@@ -10,7 +10,7 @@ export default function OfferDetail({ offer, relatedRealizations }) {
         <div className="text-center text-white">
           <h1 className="text-4xl mb-4">Oferta nie znaleziona</h1>
           <Link href="/oferta" className="text-[#C0368B] hover:text-white">
-            ← Powrót do oferty
+            ← Powrót do oferty !
           </Link>
         </div>
       </div>
