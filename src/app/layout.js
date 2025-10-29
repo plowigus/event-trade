@@ -2,6 +2,7 @@ import Menu from "./components/HeroSection/Menu";
 import { MenuProvider } from "./context/MenuContext";
 import "./globals.css";
 import localFont from "next/font/local";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const Chillax = localFont({
   src: "../../public/fonts/Chillax-Variable.ttf",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${Chillax.variable} ${Museo.variable}`}>
       <body className="antialiased">
+        <SpeedInsights />
         <MenuProvider>
           <main>
             <Menu />
