@@ -1,0 +1,124 @@
+"use client";
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Search, X } from "lucide-react";
+
+export default function OfferSearch({ offers }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filtruj oferty na podstawie wyszukiwanego terminu
+  const filteredOffers = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return offers;
+    }
+
+    const term = searchTerm.toLowerCase().trim();
+
+    return offers.filter((offer) => {
+      // Szukaj tylko w tytule
+      return offer.title.toLowerCase().includes(term);
+    });
+  }, [offers, searchTerm]);
+
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
+  return (
+    <div className="container mx-auto px-8 py-20 text-white">
+      <h1 className="text-4xl font-bold mb-12 text-center">Nasza Oferta</h1>
+
+      <p className="text-gray-300 text-center mb-8 max-w-2xl mx-auto">
+        Poznaj nasze usługi eventowe - od bankietów po konferencje biznesowe:
+      </p>
+
+      {/* Search Bar - z lewej strony */}
+      <div className="flex justify-end items-center mb-12">
+        <div className="w-80">
+          <div className="relative">
+            <Search size={24} className="absolute svg-icon-search" />
+            <input
+              type="text"
+              placeholder="Szukaj po tytule..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C0368B] focus:border-transparent transition-colors text-sm"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Lista ofert */}
+      {filteredOffers.length === 0 && searchTerm ? (
+        <div className="text-center py-16">
+          <div className="text-gray-400 text-lg">
+            Brak ofert zawierających "{searchTerm}"
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          {filteredOffers.map((offer) => (
+            <div
+              key={offer.id}
+              className="group bg-gray-900 rounded-lg overflow-hidden hover:bg-gray-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#C0368B]/20 flex flex-col h-full"
+            >
+              {/* Hero Image */}
+              <div className="relative h-96 overflow-hidden">
+                {offer.content.images.length > 0 ? (
+                  <Image
+                    src={offer.content.images[0].url}
+                    alt={offer.content.images[0].alt || offer.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 767px) calc(100vw - 64px), (max-width: 1023px) calc(50vw - 48px), calc(33vw - 32px)"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-[#53A7B2] to-[#C0368B] flex items-center justify-center">
+                    <span className="text-white text-3xl font-bold">
+                      {offer.title.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 flex flex-col h-auto">
+                {/* Title - klikalny do oferty */}
+                <Link
+                  href={`/oferta/${offer.slug}`}
+                  className="text-xl font-bold text-white mb-2 hover:text-[#C0368B] transition-colors line-clamp-2 block"
+                >
+                  {offer.title}
+                </Link>
+
+                {/* Description - bold text */}
+                <div className="text-gray-400 text-sm font-light mb-4 flex-grow overflow-hidden">
+                  {offer.content.boldText ? (
+                    <div
+                      className=""
+                      dangerouslySetInnerHTML={{
+                        __html: offer.content.boldText,
+                      }}
+                    />
+                  ) : (
+                    <div className="h-12"></div>
+                  )}
+                </div>
+
+                {/* Link do oferty - zawsze na dole */}
+                <Link
+                  href={`/oferta/${offer.slug}`}
+                  className="text-[#C0368B] hover:text-white transition-colors text-sm font-semibold inline-block mt-auto"
+                >
+                  Zobacz ofertę →
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

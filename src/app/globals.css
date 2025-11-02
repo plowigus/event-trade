@@ -364,3 +364,12 @@ svg {
 .team-container .team-gradient:hover {
   flex: 2.2 !important; /* Rozszerz aktywny do 220% */
 }
+
+.svg-icon-search {
+  height: 24px;
+  width: 24px;
+  top: 50%;
+  left: 2%;
+  transform: translate(-0%, -50%);
+  pointer-events: none;
+}
