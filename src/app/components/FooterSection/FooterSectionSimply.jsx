@@ -16,17 +16,30 @@ export default async function FooterSectionSimply() {
       <p className="uppercase font-museo text-white tracking-widest text-center">
         Zadzwoń lub napisz do nas:
       </p>
-      <div className="grid grid-cols-9 px-8 w-full  text-white  mt-16 gap-6">
-        <div className="col-span-3 flex justify-center items-start relative rounded-xl ">
-          <span className="text-white font-museo tracking-widest text-2xl uppercase ">
-            {data.mainSection.text}
-          </span>
+      <div className="grid grid-cols-12 lg:grid-cols-9 px-4 md:px-8 w-full text-white mt-16 gap-6">
+        <div className="col-span-12 lg:col-span-3 flex justify-start items-start relative rounded-xl h-auto lg:h-auto">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <Image
+                src="/images/tel.png"
+                alt="Telefon"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div
+              className="text-lg font-museo ml-8 tracking-widest uppercase flex items-center"
+              style={{ minHeight: "50px" }}
+            >
+              <span className="text-white">{data.mainSection.text}</span>
+            </div>
+          </div>
         </div>
-        <div className="col-span-3 rounded-xl ">
-          <div className="flex flex-col justify-start items-center h-full">
+        <div className="col-span-12 lg:col-span-3 rounded-xl h-auto lg:h-auto">
+          <div className="flex flex-col justify-start items-start h-full">
             {/* Address Section */}
-            <div className="flex">
-              <div className="">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
                 <Image
                   src={data.addressSection.mainImage.url}
                   alt={data.addressSection.mainImage.alt}
@@ -41,8 +54,8 @@ export default async function FooterSectionSimply() {
               </div>
             </div>
 
-            <div className="flex mt-8">
-              <div className="">
+            <div className="flex items-start mt-8">
+              <div className="flex-shrink-0">
                 <Image
                   src={data.addressSection.hoursImage.url}
                   alt={data.addressSection.hoursImage.alt}
@@ -57,18 +70,25 @@ export default async function FooterSectionSimply() {
             </div>
           </div>
         </div>
-        <div className="col-span-3  relative rounded-xl overflow-hidden">
-          <div className="">
-            {emails.map((email, index) => {
-              return (
-                <p
-                  key={index}
-                  className="text-white font-museo tracking-widest text-lg mb-1 uppercase "
-                >
-                  {email}
-                </p>
-              );
-            })}
+        <div className="col-span-12 lg:col-span-3 relative rounded-xl overflow-hidden h-auto lg:h-auto flex justify-start">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <Image
+                src="/images/koperta.png"
+                alt="Email"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div className="ml-8 text-lg font-museo tracking-widest uppercase">
+              {emails.map((email, index) => {
+                return (
+                  <p key={index} className="text-white mb-1">
+                    {email}
+                  </p>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
