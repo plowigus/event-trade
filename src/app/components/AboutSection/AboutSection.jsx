@@ -159,7 +159,7 @@ export default function AboutSecion() {
         </div>
 
         {/* Zdjęcie pod tekstem na mobile/tablet */}
-        <div className="lg:hidden w-full pb-10 z-[31] relative">
+        <div className="lg:hidden w-full pb-0 md:pb-10 z-[31] relative">
           <Image
             src={data.image.url}
             alt={data.title}
