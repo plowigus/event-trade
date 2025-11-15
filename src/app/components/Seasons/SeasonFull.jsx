@@ -182,7 +182,7 @@ export default function SeasonFull({ data }) {
       {/* Custom Cursor */}
       <div
         ref={customCursorRef}
-        className="absolute pointer-events-none z-[9999] w-30 h-30 opacity-0"
+        className="absolute pointer-events-none z-[9999] w-30 h-30 opacity-0 hidden lg:block"
         style={{
           transform: "translate(-50%, -50%)",
           top: "17%",
@@ -198,8 +198,8 @@ export default function SeasonFull({ data }) {
         />
       </div>
 
-      <div className="grid grid-cols-5 grid-rows-1 w-full">
-        <div className="col-span-2">
+      <div className="grid lg:grid-cols-5 grid-rows-1 w-full">
+        <div className="hidden lg:block col-span-2">
           <Image
             ref={statueRef}
             width={500}
@@ -211,7 +211,7 @@ export default function SeasonFull({ data }) {
         </div>
 
         {/* Prawa strona z tekstem */}
-        <div className="col-span-3 col-start-3 flex flex-col">
+        <div className="lg:col-span-3 lg:col-start-3 flex flex-col">
           {/* Nawigacja sezonów */}
           <div className="flex w-full justify-between text-lg lg:text-xl text-white font-museo uppercase flex-wrap">
             {Object.entries(seasons).map(([key, season]) => (
@@ -230,9 +230,9 @@ export default function SeasonFull({ data }) {
           </div>
 
           {/* Zawartość aktywnego sezonu - podział na tekst i video */}
-          <div className="flex-1 grid grid-cols-12">
+          <div className="flex-1 lg:grid lg:grid-cols-12">
             {/* Lewa strona - treść tekstowa - 4/12 */}
-            <div className="col-span-5 text-white mt-10">
+            <div className="lg:col-span-5 text-white mt-10 px-4 lg:px-0">
               {seasons[activeSeason] && (
                 <div ref={textContentRef} className="space-y-6">
                   {/* Tytuły sekcji */}
@@ -295,7 +295,7 @@ export default function SeasonFull({ data }) {
             </div>
 
             {/* Prawa strona - video - 8/12 */}
-            <div className="col-span-7">
+            <div className="hidden lg:block lg:col-span-7">
               <div className="bg-black/20  overflow-hidden h-full">
                 {seasons[activeSeason]?.data?.videoUrl ? (
                   // Sprawdź czy to YouTube URL czy direct video

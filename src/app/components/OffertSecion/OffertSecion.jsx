@@ -42,17 +42,17 @@ export default function OffertSecion() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-10 grid-rows-2 gap-8  flex-1 z-[30] my-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 lg:grid-rows-2 gap-8 flex-1 z-[30] my-16 px-8 md:px-4 lg:px-0">
         {offerts.map((offert, index) => {
           // Pozycje w gridzie 10 kolumn: 2 odstępu + 2 karty + 2 karty + 2 karty + 2 odstępy
           // Kolumny: [1-2 odstęp] [3-4 karta1] [5-6 karta2] [7-8 karta3] [9-10 odstęp]
           const positions = [
-            { col: "col-start-3 col-span-2", row: "row-start-1" }, // Karta 1: kolumny 3-4
-            { col: "col-start-5 col-span-2", row: "row-start-1" }, // Karta 2: kolumny 5-6
-            { col: "col-start-7 col-span-2", row: "row-start-1" }, // Karta 3: kolumny 7-8
-            { col: "col-start-3 col-span-2", row: "row-start-2" }, // Karta 4: kolumny 3-4
-            { col: "col-start-5 col-span-2", row: "row-start-2" }, // Karta 5: kolumny 5-6
-            { col: "col-start-7 col-span-2", row: "row-start-2" }, // Karta 6: kolumny 7-8
+            { col: "lg:col-start-3 lg:col-span-2", row: "lg:row-start-1" }, // Karta 1: kolumny 3-4
+            { col: "lg:col-start-5 lg:col-span-2", row: "lg:row-start-1" }, // Karta 2: kolumny 5-6
+            { col: "lg:col-start-7 lg:col-span-2", row: "lg:row-start-1" }, // Karta 3: kolumny 7-8
+            { col: "lg:col-start-3 lg:col-span-2", row: "lg:row-start-2" }, // Karta 4: kolumny 3-4
+            { col: "lg:col-start-5 lg:col-span-2", row: "lg:row-start-2" }, // Karta 5: kolumny 5-6
+            { col: "lg:col-start-7 lg:col-span-2", row: "lg:row-start-2" }, // Karta 6: kolumny 7-8
           ];
 
           const position = positions[index];
@@ -85,7 +85,19 @@ function OffertCard({ offert, position }) {
 
     if (!card || !overlay || !title || !textBottom) return;
 
-    // Ustaw początkowe stany
+    // Sprawdź czy to mobile
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Na mobile: overlay zawsze widoczne
+      gsap.set(overlay, { opacity: 1 });
+      gsap.set(title, { opacity: 1, y: 0 });
+      gsap.set(checks, { opacity: 1, x: 0 });
+      gsap.set(textBottom, { opacity: 0 });
+      return; // Nie dodawaj event listenerów
+    }
+
+    // Desktop: ustaw początkowe stany (ukryte)
     gsap.set(overlay, { opacity: 0 });
     gsap.set(title, { opacity: 0, y: 30 });
     gsap.set(checks, { opacity: 0, x: -20 });
@@ -242,7 +254,7 @@ function OffertCard({ offert, position }) {
         {/* Hover overlay - animacja z checkboxami */}
         <div
           ref={overlayRef}
-          className="absolute inset-0 bg-[#000000c9] z-30 col-span-12 row-span-12 "
+          className="absolute inset-0 bg-[#000000c9] z-30 col-span-12 row-span-12 md:opacity-0"
         >
           <div className="grid grid-cols-12 grid-rows-12 h-full w-full  text-white">
             {/* Tytuł na górze */}
@@ -268,7 +280,7 @@ function OffertCard({ offert, position }) {
               >
                 <h3
                   ref={titleRef}
-                  className="text-xl font-museo uppercase p-4 mt-8 hover:text-gray-300 transition-colors"
+                  className="text-xl font-museo uppercase p-4 mt-8 hover:text-gray-300 transition-colors md:opacity-0"
                 >
                   {offert.title}
                 </h3>
@@ -302,7 +314,7 @@ function OffertCard({ offert, position }) {
                   >
                     <div
                       ref={(el) => (checksRef.current[checkIndex] = el)}
-                      className="flex items-center space-x-3 hover:text-gray-300 transition-colors"
+                      className="flex items-center space-x-3 hover:text-gray-300 transition-colors md:opacity-0"
                     >
                       <div className="w-2 h-2 bg-[#53A7B2] rounded-full flex-shrink-0"></div>
                       <span className="text-xs leading-relaxed">{check}</span>

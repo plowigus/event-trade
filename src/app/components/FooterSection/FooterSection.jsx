@@ -16,8 +16,8 @@ export default async function FooterSection() {
       <p className="uppercase font-museo text-white tracking-widest text-center">
         Zadzwoń lub napisz do nas:
       </p>
-      <div className="grid grid-cols-9 px-8 w-full h-[400px] text-white  mt-16 gap-6">
-        <div className="col-span-3 footer-gradient-1 relative rounded-xl">
+      <div className="grid grid-cols-12 lg:grid-cols-9 px-4 md:px-8 w-full h-auto text-white mt-16 gap-6">
+        <div className="col-span-12 lg:col-span-3 footer-gradient-1 relative rounded-xl h-[400px] lg:min-h-[400px] lg:h-auto py-8">
           {/* Nested grid wewnątrz kolumny z telefonem */}
           <div className="absolute inset-0 grid-rows-5 grid grid-cols-12 z-10">
             {/* Pasek z opacity o szerokości 9/12 col na oczach figury */}
@@ -35,7 +35,7 @@ export default async function FooterSection() {
             className="absolute bottom-0 left-0"
           />
         </div>
-        <div className="col-span-3 rounded-xl footer-gradient-2">
+        <div className="col-span-12 lg:col-span-3 rounded-xl footer-gradient-2 h-[400px] lg:min-h-[400px] lg:h-auto py-8">
           <div className="flex flex-col justify-center items-center h-full">
             {/* Address Section */}
             <div className="flex">
@@ -70,7 +70,7 @@ export default async function FooterSection() {
             </div>
           </div>
         </div>
-        <div className="col-span-3 footer-gradient-3 relative rounded-xl overflow-hidden">
+        <div className="col-span-12 lg:col-span-3 footer-gradient-3 relative rounded-xl overflow-hidden h-[400px] lg:min-h-[400px] lg:h-auto">
           <div className="absolute inset-0 grid-rows-6 grid grid-cols-12 z-10">
             {/* Pasek z opacity o szerokości 9/12 col na oczach figury */}
             <div className="col-span-10 row-span-3  row-start-2 bg-[#f1b94a7a] h-auto  p-4 lex items-center justify-start">

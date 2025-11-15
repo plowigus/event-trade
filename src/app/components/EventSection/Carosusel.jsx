@@ -25,7 +25,7 @@ export default function Carousel({ carouselData }) {
   }
 
   return (
-    <div className="embla py-8" ref={emblaRef}>
+    <div className="embla py-8 overflow-x-hidden md:overflow-x-visible" ref={emblaRef}>
       <div className="embla__container cursor-grab active:cursor-grabbing select-none">
         {dataToRender.map((item, index) => (
           <div key={index} className="embla__slide">

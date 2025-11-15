@@ -2,24 +2,48 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, X } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 
 export default function OfferSearch({ offers }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("all");
 
-  // Filtruj oferty na podstawie wyszukiwanego terminu
+  // Wyciągnij unikalne subkategorie z ofert
+  const subcategories = useMemo(() => {
+    const allSubcategories = offers.flatMap(
+      (offer) => offer.subcategories || []
+    );
+    const uniqueSubcategories = allSubcategories.filter(
+      (subcat, index, self) =>
+        index === self.findIndex((s) => s.slug === subcat.slug)
+    );
+    return uniqueSubcategories;
+  }, [offers]);
+
+  // Filtruj oferty na podstawie wyszukiwanego terminu i wybranej subkategorii
   const filteredOffers = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return offers;
+    let filtered = offers;
+
+    // Filtruj po subkategorii
+    if (selectedSubcategory !== "all") {
+      filtered = filtered.filter((offer) =>
+        offer.subcategories?.some(
+          (subcat) => subcat.slug === selectedSubcategory
+        )
+      );
     }
 
-    const term = searchTerm.toLowerCase().trim();
+    // Filtruj po wyszukiwanym terminie
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((offer) => {
+        // Szukaj tylko w tytule
+        return offer.title.toLowerCase().includes(term);
+      });
+    }
 
-    return offers.filter((offer) => {
-      // Szukaj tylko w tytule
-      return offer.title.toLowerCase().includes(term);
-    });
-  }, [offers, searchTerm]);
+    return filtered;
+  }, [offers, searchTerm, selectedSubcategory]);
 
   const clearSearch = () => {
     setSearchTerm("");
@@ -33,8 +57,69 @@ export default function OfferSearch({ offers }) {
         Poznaj nasze usługi eventowe - od bankietów po konferencje biznesowe:
       </p>
 
-      {/* Search Bar - z lewej strony */}
-      <div className="flex justify-end items-center mb-12">
+      {/* Informacja o filtrach i liczbie wyników */}
+      {(searchTerm || selectedSubcategory !== "all") && (
+        <div className="mb-6 text-center">
+          <div className="text-gray-300 text-sm">
+            Znaleziono{" "}
+            <span className="font-semibold text-[#C0368B]">
+              {filteredOffers.length}
+            </span>{" "}
+            {filteredOffers.length === 1
+              ? "ofertę"
+              : filteredOffers.length <= 4
+              ? "oferty"
+              : "ofert"}
+            {searchTerm && <span> zawierającą "{searchTerm}"</span>}
+            {selectedSubcategory !== "all" && (
+              <span>
+                {" "}
+                w kategorii "
+                {
+                  subcategories.find((s) => s.slug === selectedSubcategory)
+                    ?.name
+                }
+                "
+              </span>
+            )}
+          </div>
+          {(searchTerm || selectedSubcategory !== "all") && (
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedSubcategory("all");
+              }}
+              className="mt-2 text-xs text-gray-400 hover:text-[#C0368B] transition-colors"
+            >
+              Wyczyść wszystkie filtry
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Search Bar i Filtr Subkategorii */}
+      <div className="flex justify-end items-center gap-4 mb-12">
+        {/* Filtr subkategorii - rozwijane menu */}
+        <div className="relative">
+          <select
+            value={selectedSubcategory}
+            onChange={(e) => setSelectedSubcategory(e.target.value)}
+            className="appearance-none bg-gray-900 border border-gray-700 rounded-lg text-white px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#C0368B] focus:border-transparent transition-colors cursor-pointer"
+          >
+            <option value="all">Wszystkie kategorie</option>
+            {subcategories.map((subcat) => (
+              <option key={subcat.slug} value={subcat.slug}>
+                {subcat.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={20}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+          />
+        </div>
+
+        {/* Search Bar */}
         <div className="w-80">
           <div className="relative">
             <Search size={24} className="absolute svg-icon-search" />
@@ -50,14 +135,44 @@ export default function OfferSearch({ offers }) {
       </div>
 
       {/* Lista ofert */}
-      {filteredOffers.length === 0 && searchTerm ? (
+      {filteredOffers.length === 0 &&
+      (searchTerm || selectedSubcategory !== "all") ? (
         <div className="text-center py-16">
           <div className="text-gray-400 text-lg">
-            Brak ofert zawierających "{searchTerm}"
+            {searchTerm && selectedSubcategory !== "all" ? (
+              <>
+                Brak ofert zawierających "{searchTerm}" w kategorii "
+                {
+                  subcategories.find((s) => s.slug === selectedSubcategory)
+                    ?.name
+                }
+                "
+              </>
+            ) : searchTerm ? (
+              <>Brak ofert zawierających "{searchTerm}"</>
+            ) : (
+              <>
+                Brak ofert w kategorii "
+                {
+                  subcategories.find((s) => s.slug === selectedSubcategory)
+                    ?.name
+                }
+                "
+              </>
+            )}
           </div>
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setSelectedSubcategory("all");
+            }}
+            className="mt-4 px-6 py-2 bg-[#C0368B] text-white rounded-lg hover:bg-[#A02A75] transition-colors"
+          >
+            Wyczyść filtry
+          </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {filteredOffers.map((offer) => (
             <div
               key={offer.id}
@@ -70,7 +185,7 @@ export default function OfferSearch({ offers }) {
                     src={offer.content.images[0].url}
                     alt={offer.content.images[0].alt || offer.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300 aspect-[16/9]"
                     sizes="(max-width: 767px) calc(100vw - 64px), (max-width: 1023px) calc(50vw - 48px), calc(33vw - 32px)"
                   />
                 ) : (

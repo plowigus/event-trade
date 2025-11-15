@@ -12,7 +12,7 @@ export default async function BlogSection() {
       {/* Tytuł sekcji */}
       <div className="text-center mb-16">
         <h2 className="text-3xl font-museo tracking-widest uppercase">
-          NAJNOWSZE EVENTY / AKTUALNOŚCI
+          NAJNOWSZE <br className="lg:hidden" /> EVENTY
         </h2>
       </div>
 

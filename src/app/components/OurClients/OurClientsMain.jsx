@@ -11,8 +11,16 @@ export default function OurClientsMain() {
   const [data, setData] = useState(null);
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 6, // Dostosuj do liczby dostępnych logo
-      spacing: 15,
+      perView: 3, // 3 na mobile
+      spacing: 20,
+    },
+    breakpoints: {
+      "(min-width: 768px)": {
+        slides: { perView: 4, spacing: 15 }, // 4 na tablet
+      },
+      "(min-width: 1024px)": {
+        slides: { perView: 6, spacing: 15 }, // 6 na desktop
+      },
     },
     loop: true,
     renderMode: "performance",

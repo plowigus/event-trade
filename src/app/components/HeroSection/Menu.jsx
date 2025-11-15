@@ -9,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 const menuData = await getMenu();
-// console.log(menuData.menu.menuItems.nodes);
 const menuItems = menuData.menu.menuItems.nodes;
 const menuImgData = await getMenuImg();
 const websiteUrl = "https://mateiko.pl";
@@ -21,13 +20,25 @@ export default function Menu() {
   const menuRef = useRef(null);
   const itemsRef = useRef([]);
   const ballsRef = useRef([]);
-  const ballsContainerRef = useRef(null); // Ref dla container z kulami
+  const ballsContainerRef = useRef(null);
   const timelineRef = useRef(null);
-  const overflowTimeoutRef = useRef(null); // Ref dla timeout overflow
+  const overflowTimeoutRef = useRef(null);
 
   // State dla dynamicznych klas menu
-  const [menuVisible, setMenuVisible] = useState(false); // kontroluje display:none/block
-  const [animationState, setAnimationState] = useState("hidden"); // 'hidden', 'opening', 'open', 'closing'
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [animationState, setAnimationState] = useState("hidden");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Hook do wykrywania mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     if (!menuRef.current) return;
@@ -45,9 +56,56 @@ export default function Menu() {
 
     // Ustaw początkową pozycję - ukryte
     gsap.set(menuRef.current, {
-      x: "100%", // Cały overlay zaczyna poza ekranem po prawej
+      x: "100%",
       opacity: 1,
     });
+
+    // Na mobile nie tworzymy animowanych kulek - oszczędzamy performance
+    if (isMobile) {
+      // Mobile version - prosta animacja bez kulek
+      const tl = gsap.timeline({
+        paused: true,
+        onStart: () => {
+          setMenuVisible(true);
+          setAnimationState("opening");
+          document.body.classList.add("overflow-hidden");
+        },
+        onComplete: () => {
+          setAnimationState("open");
+        },
+        onReverseStart: () => {
+          setAnimationState("closing");
+        },
+        onReverseComplete: () => {
+          setMenuVisible(false);
+          setAnimationState("hidden");
+          overflowTimeoutRef.current = setTimeout(() => {
+            document.body.classList.remove("overflow-hidden");
+          }, 100);
+        },
+      });
+
+      // Prosta animacja fade in/out dla mobile
+      gsap.set(menuRef.current, {
+        x: "0%",
+        opacity: 0,
+        visibility: "hidden",
+      });
+
+      tl.set(menuRef.current, {
+        opacity: 1,
+        visibility: "visible",
+      }).to(menuRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+
+      timelineRef.current = tl;
+      return;
+    }
+
+    // Desktop version - z animacjami
     // Sprawdź czy już istnieje container i usuń go
     const existingContainer = menuRef.current.querySelector(".balls-container");
     if (existingContainer) {
@@ -347,7 +405,7 @@ export default function Menu() {
       ballsContainerRef.current = null;
       timelineRef.current = null;
     };
-  }, []);
+  }, [isMobile]);
 
   // Oddzielny useEffect dla kontroli otwierania/zamykania
   useEffect(() => {
@@ -403,8 +461,9 @@ export default function Menu() {
 
   // Funkcja do generowania dynamicznych klas
   const getMenuClasses = () => {
-    const baseClasses =
-      "menu-overlay absolute top-0 left-0 w-screen h-screen z-[30] bg-black bg-opacity-95 flex items-center justify-center";
+    const baseClasses = isMobile
+      ? "menu-overlay fixed inset-0 w-screen h-dvh z-[30] bg-black  flex items-center justify-center"
+      : "menu-overlay absolute top-0 left-0 w-screen h-screen z-[30] bg-black bg-opacity-95 flex items-center justify-center";
 
     if (!menuVisible) {
       return `${baseClasses} hidden`; // display: none
@@ -431,44 +490,72 @@ export default function Menu() {
       style={{ overflow: "hidden" }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0"></div>
+      <div className="absolute  inset-0"></div>
 
-      {/* Obraz zawsze w prawym dolnym rogu - responsywny */}
-      <div className="absolute bottom-0 right-0 z-30 max-w-[70vw] max-h-[90vh]">
-        <Image
-          src={menuImgPath}
-          alt="Menu Image"
-          width={800}
-          height={1000}
-          className="object-bottom-right h-auto w-auto z-30"
-          style={{
-            maxHeight: "90vh",
-            maxWidth: "70vw",
-            height: "60rem",
-            width: "auto",
-            objectPosition: "bottom right",
-          }}
-          priority
-        />
-      </div>
-      {/* Content - zwiększony z-index żeby był nad kulami */}
-      <div className="p-8 flex items-start mb-5 flex-col justify-between m-auto text-white relative container z-10">
-        {menuItems.map((item, index) => {
-          const slug = pathToSlug(item.path);
-          const href = slug ? `/${slug}` : "/";
+      {isMobile ? (
+        // Mobile Layout - Tekst po lewej stronie
+        <div className="w-full h-full bg-black flex items-center justify-start px-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+          <div className="text-left">
+            {menuItems.map((item, index) => {
+              const slug = pathToSlug(item.path);
+              const href = slug ? `/${slug}` : "/";
 
-          return (
-            <Link key={item.id} href={href} onClick={closeMenu}>
-              <h2
-                ref={(el) => (itemsRef.current[index] = el)}
-                className="text-5xl tracking-[8px] uppercase cursor-pointer font-chillax mb-4 overflow-hidden menu-item-wrapper"
-              >
-                {item.label}
-              </h2>
-            </Link>
-          );
-        })}
-      </div>
+              return (
+                <Link
+                  key={item.id}
+                  href={href}
+                  onClick={closeMenu}
+                  className="block"
+                >
+                  <h2 className="text-2xl md:text-3xl font-chillax uppercase cursor-pointer text-white hover:text-[#C0368B] transition-colors duration-300 leading-tight py-2">
+                    {item.label}
+                  </h2>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        // Desktop Layout - Oryginalny
+        <>
+          {/* Obraz zawsze w prawym dolnym rogu - tylko desktop */}
+          <div className="absolute bottom-0 right-0 z-30 max-w-[70vw] max-h-[90vh]">
+            <Image
+              src={menuImgPath}
+              alt="Menu Image"
+              width={800}
+              height={1000}
+              className="object-bottom-right h-auto w-auto z-30"
+              style={{
+                maxHeight: "90vh",
+                maxWidth: "70vw",
+                height: "60rem",
+                width: "auto",
+                objectPosition: "bottom right",
+              }}
+              priority
+            />
+          </div>
+          {/* Desktop Content */}
+          <div className="p-8 flex items-start mb-5 flex-col justify-between m-auto text-white relative container z-10">
+            {menuItems.map((item, index) => {
+              const slug = pathToSlug(item.path);
+              const href = slug ? `/${slug}` : "/";
+
+              return (
+                <Link key={item.id} href={href} onClick={closeMenu}>
+                  <h2
+                    ref={(el) => (itemsRef.current[index] = el)}
+                    className="text-5xl tracking-[8px] uppercase cursor-pointer font-chillax mb-4 overflow-hidden menu-item-wrapper"
+                  >
+                    {item.label}
+                  </h2>
+                </Link>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }

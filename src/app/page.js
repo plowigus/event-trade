@@ -13,7 +13,7 @@ export default async function Home() {
   const data = await getGreekSection();
 
   return (
-    <>
+    <div className="bg-black h-auto">
       <Hero />
       <SeasonFull data={data} />
       <EventCarousel />
@@ -23,6 +23,6 @@ export default async function Home() {
       <BlogSection />
       <OurClientsMain />
       <FooterSection />
-    </>
+    </div>
   );
 }

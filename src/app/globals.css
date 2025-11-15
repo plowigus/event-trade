@@ -7,12 +7,20 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 20px;
+  /* Fix dla iOS Safari viewport */
+  height: 100%;
+  height: -webkit-fill-available;
 }
 
 body {
   overflow-x: hidden;
   /* Delikatne przyspieszenie/opóźnienie podczas scrollowania */
   overscroll-behavior: smooth;
+  /* Fix dla iOS Safari */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  margin: 0;
+  padding: 0;
 }
 
 /* Line clamp utilities */
@@ -206,7 +214,19 @@ svg {
 .embla__container {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 33%; /* Each slide covers 80% of the viewport */
+  grid-auto-columns: 100%; /* Mobile: 1 slide, Desktop: 33% */
+}
+
+@media (min-width: 768px) {
+  .embla__container {
+    grid-auto-columns: 50%; /* Tablet: 2 slides */
+  }
+}
+
+@media (min-width: 1024px) {
+  .embla__container {
+    grid-auto-columns: 33%; /* Desktop: 3 slides */
+  }
 }
 
 .embla__slide {
@@ -372,4 +392,16 @@ svg {
   left: 2%;
   transform: translate(-0%, -50%);
   pointer-events: none;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 767px) {
+  /* Wyłączenie animacji menu na mobile dla lepszej wydajności */
+  .menu-item-wrapper::before {
+    display: none;
+  }
+
+  .menu-item-wrapper:hover::before {
+    display: none;
+  }
 }

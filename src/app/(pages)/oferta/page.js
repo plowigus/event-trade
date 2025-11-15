@@ -8,7 +8,7 @@ export default async function OfertaPage() {
 
   return (
     <>
-      <div className="bg-black min-h-screen w-full relative">
+      <div className="bg-black h-auto w-full relative">
         <Header />
         <OfferSearch offers={offerData.offers} />
       </div>
