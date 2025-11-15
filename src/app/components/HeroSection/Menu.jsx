@@ -85,21 +85,42 @@ export default function Menu() {
         },
       });
 
-      // Prosta animacja fade in/out dla mobile
+      // Ustaw początkową pozycję - ukryte z prawej strony
       gsap.set(menuRef.current, {
-        x: "0%",
-        opacity: 0,
+        x: "100%",
+        opacity: 1,
         visibility: "hidden",
       });
 
-      tl.set(menuRef.current, {
-        opacity: 1,
-        visibility: "visible",
-      }).to(menuRef.current, {
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.out",
+      // Proste elementy menu dla mobile
+      const mobileItems = menuRef.current.querySelectorAll(".mobile-menu-item");
+
+      // Ustaw początkowy stan dla elementów menu
+      gsap.set(mobileItems, {
+        opacity: 0,
+        x: 50,
       });
+
+      // Animacja wjazdu overlay + fade in elementów
+      tl.set(menuRef.current, {
+        visibility: "visible",
+      })
+        .to(menuRef.current, {
+          x: "0%",
+          duration: 0.4,
+          ease: "power2.out",
+        })
+        .to(
+          mobileItems,
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.3,
+            stagger: 0.08,
+            ease: "power2.out",
+          },
+          "-=0.2"
+        );
 
       timelineRef.current = tl;
       return;
@@ -414,9 +435,19 @@ export default function Menu() {
     if (isMenuOpen) {
       // Otwórz menu z animacją
       timelineRef.current.play();
+      // Dodatkowa blokada scrollowania dla mobile
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.height = "100%";
     } else {
       // Zamknij menu z reverse animacją (onReverseComplete ukryje overlay)
       timelineRef.current.reverse();
+      // Przywróć scrollowanie
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
     }
   }, [isMenuOpen]);
 
@@ -494,7 +525,7 @@ export default function Menu() {
 
       {isMobile ? (
         // Mobile Layout - Tekst po lewej stronie
-        <div className="w-full h-full bg-black flex items-center justify-start px-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+        <div className="w-full h-full bg-black flex items-center justify-start p-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] relative z-40">
           <div className="text-left">
             {menuItems.map((item, index) => {
               const slug = pathToSlug(item.path);
@@ -505,9 +536,10 @@ export default function Menu() {
                   key={item.id}
                   href={href}
                   onClick={closeMenu}
-                  className="block"
+                  className="block mobile-menu-item relative z-50"
+                  style={{ pointerEvents: "auto" }}
                 >
-                  <h2 className="text-2xl md:text-3xl font-chillax uppercase cursor-pointer text-white hover:text-[#C0368B] transition-colors duration-300 leading-tight py-2">
+                  <h2 className="text-4xl md:text-5xl font-chillax uppercase cursor-pointer text-white hover:text-[#C0368B] transition-colors duration-300 leading-tight py-3">
                     {item.label}
                   </h2>
                 </Link>
